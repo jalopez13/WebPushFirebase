@@ -1,3 +1,3 @@
 # WebPushFirebase
 
-Web Push Notifications Application Built with FireBase
+Web push notifications application built with FireBase.
