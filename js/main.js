@@ -106,15 +106,20 @@ unsubscribeBtn.addEventListener('click', handleUnsubscribeToNotifications);
  */
 
 const sendBtn = document.getElementById('send-btn');
-const notificationMessage = document.getElementById('notification-form').value;
+const notificationForm = document.getElementById('notification-form');
+const notificationMessage = document.getElementById('notification-message');
 
 const handleSendNotification = (event) => {
   event.preventDefault();
 
   FIREBASE_DATABASE.ref('/notifications').push({
     user: FIREBASE_AUTH.currentUser.displayName,
-    message: notificationMessage
+    message: notificationMessage.value,
+    userProfileImg: FIREBASE_AUTH.currentUser.photoURL
+  })
+  .then(() => {
+    document.getElementById('notification-form').value = '';
   });
 };
 
-sendBtn.addEventListener('submit', handleSendNotification);
+notificationForm.addEventListener('submit', handleSendNotification);
