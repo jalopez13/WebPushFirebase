@@ -4,6 +4,10 @@
 
 const signIn = document.getElementById('signin');
 const signOut = document.getElementById('signout');
+const sendBtn = document.getElementById('send-btn');
+const notificationForm = document.getElementById('notification-form');
+const notificationMessage = document.getElementById('notification-message');
+
 
 const FIREBASE_AUTH = firebase.auth();
 const FIREBASE_MESSAGING = firebase.messaging();
@@ -21,10 +25,12 @@ const handleAuthStateChange = user => {
   if (user) {
     signIn.setAttribute('hidden', true);
     signOut.removeAttribute('hidden');
+    notificationForm.removeAttribute('hidden');
     checkSubscription();
   } else {
     signIn.removeAttribute('hidden');
     signOut.setAttribute('hidden', true);
+    notificationForm.setAttribute('hidden', true);
   }
 };
 
@@ -59,9 +65,6 @@ const handleSubscribeToNotifications = () => {
   .then(token => handleTokenRefresh())
   .then(() => checkSubscription())
   .catch(error => console.log("User didn't give permission :(", error))
-  
-
-
 };
 
 subscribeBtn.addEventListener('click', handleSubscribeToNotifications);
@@ -105,9 +108,7 @@ unsubscribeBtn.addEventListener('click', handleUnsubscribeToNotifications);
  * SEND NOTIFICATIONS
  */
 
-const sendBtn = document.getElementById('send-btn');
-const notificationForm = document.getElementById('notification-form');
-const notificationMessage = document.getElementById('notification-message');
+const successMessage = document.getElementById('success-message');
 
 const handleSendNotification = (event) => {
   event.preventDefault();
@@ -118,7 +119,12 @@ const handleSendNotification = (event) => {
     userProfileImg: FIREBASE_AUTH.currentUser.photoURL
   })
   .then(() => {
-    document.getElementById('notification-form').value = '';
+    successMessage.classList.add('active');
+    notificationForm.value = ''; 
+
+    setTimeout(function() {
+      successMessage.classList.remove('active');
+    }, 2000);
   });
 };
 
