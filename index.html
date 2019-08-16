@@ -35,16 +35,16 @@
             <button id="subscribe" class="btn btn-primary" hidden>Subscribe</button>
             <button id="unsubscribe" class="btn btn-primary" hidden>Unsubscribe</button>
 
-            <form id="notification-form" class="mt-4">
+            <form id="notification-form" class="mt-4" hidden>
                 <label for="notification-message">Notification Message</label>
-
                 <div class="input-group mb-2">
-                  <textarea class="form-control" aria-label="Notification Message" placeholder="What would you like to say?"></textarea>
-                  <button type="submit" aria-label="Send" id="send-btn" class="ml-2 send-btn">
+                  <textarea id="notification-message" class="form-control" aria-label="Notification Message" placeholder="What would you like to say?"></textarea>
+                  <button type="submit" aria-label="Send" id="submitBtn" class="ml-2 send-btn">
                       <img src="img/send.png" alt="">
                   </button>
                 </div>
             </form>
+            <div id="info" class="alert alert-info"></div>
           </main>
         </div>
   </div>
