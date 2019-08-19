@@ -2,6 +2,12 @@
 
 A simple Firebase messaging application to send notifications to everyone subscribed.
 
+## Usage
+
+```
+firebase login && firebase serve
+```
+
 ## Technologies
 
 * Firebase Javascript SDK
