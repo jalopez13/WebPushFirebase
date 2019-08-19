@@ -123,6 +123,12 @@ const checkSubscription = () => {
 
 const handleSendNotification = (event) => {
   event.preventDefault();
+
+  if (!notificationMessage.value) {
+    alert('Please enter a notification message.');
+    return;
+  };
+
   FIREBASE_DATABASE.ref('/notifications').push({
     user: FIREBASE_AUTH.currentUser.displayName,
     message: notificationMessage.value,
@@ -130,6 +136,20 @@ const handleSendNotification = (event) => {
   })
   .then(() => {
     notificationMessage.value = '';
+    infoDiv.classList.add('active');
+    infoDiv.innerText = `Notification sent successfully!`;
+
+    setTimeout(function() {
+      infoDiv.classList.remove('active');
+    }, 5000);
+  })
+  .catch(error => {
+    infoDiv.classList.add('active');
+    infoDiv.innerText = `Notification error occurred, Notification sent failed! :(", ${error}`;
+
+    setTimeout(function() {
+      infoDiv.classList.remove('active');
+    }, 5000);
   });
 };
 

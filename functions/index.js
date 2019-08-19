@@ -5,17 +5,24 @@ const admin = require('firebase-admin');
 
 admin.initializeApp(functions.config().firebase);
 
-exports.sendNotifications = functions.database.ref('/notifications/{notificationId}').onWrite(async (change) => {
-  if (!change.after) return;
+exports.sendNotifications = functions.database.ref('/notifications/{notificationId}').onWrite((change, context) => {
+  // Only edit data when it is first created.
+  if (change.before.exists()) {
+    return null;
+  }
+  // Exit when the data is deleted.
+  if (!change.after.exists()) {
+    return null;
+  }
 
-  const NOTIFICATION_SNAPSHOT = change.after;
+  const NOTIFICATION_SNAPSHOT = change.after.val();
   const projectId = admin.instanceId().app.options.projectId;
 
   const payload = {
     notification: {
-      title: `New message from  ${NOTIFICATION_SNAPSHOT.val().user}`,
-      body: NOTIFICATION_SNAPSHOT.val().message,
-      icon: NOTIFICATION_SNAPSHOT.val().userImage,
+      title: `New message from  ${NOTIFICATION_SNAPSHOT.user}`,
+      body: NOTIFICATION_SNAPSHOT.message,
+      icon: NOTIFICATION_SNAPSHOT.userImage,
       click_action: `https://${projectId}.firebaseapp.com`
     }
   };
@@ -46,7 +53,6 @@ exports.sendNotifications = functions.database.ref('/notifications/{notification
     return Promise.all(invalidTokens);
   };
 
-  // eslint-disable-next-line consistent-return
   return admin.database().ref('/tokens').once('value').then(data => {
       if (!data.val()) return;
 
@@ -65,7 +71,7 @@ exports.sendNotifications = functions.database.ref('/notifications/{notification
       return admin.messaging().sendToDevice(tokens, payload, options)
       .then(res => clearInvalidTokens(res.results, tokensWithKey))
       .then(() => {
-        return admin.database().ref('/notifications').child(NOTIFICATION_SNAPSHOT.key).remove()
+        return admin.database().ref('/notifications').child(context.params.notificationId).remove(); // fix!
       })
       .then(res => console.log('Successfully sent message:', res))
       .catch(error => console.log('Error sending message:', error));
