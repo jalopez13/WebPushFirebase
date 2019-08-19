@@ -6,7 +6,7 @@ A simple Firebase messaging application to send notifications to everyone subscr
 
 * Create a Firebase account and start a new project.
 * Enable Google authentication provider by going to Authentication > Sign-in method and enabling Google as provider
-* Updated `firebase-messaging-sw.js` in repo with you projects configuration. [apiKey, authDomain, databaseURL, messagingSenderId]
+* Updated `firebase-messaging-sw.js` in repo with your projects configuration. [apiKey, authDomain, databaseURL, messagingSenderId]
 * Run:
 ```
 firebase login && firebase serve
